@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rail Connect</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f5f0e1;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar-light {
+      background-color: #a97442;
+    }
+
+    .navbar-brand,
+    .nav-link {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      text-decoration: underline;
+    }
+
+    .page-background {
+      background: linear-gradient(rgba(181, 148, 109, 0.8), rgba(181, 148, 109, 0.8)),
+        url('./images/landing photo.jpg') no-repeat center 70%;
+      background-size: cover;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .page-background h1 {
+      font-weight: 700;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .page-background p.lead {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-outline-light {
+      border-color: #fff;
+      color: #fff;
+      font-weight: 600;
+      margin: 0 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+      background-color: #fff;
+      color: #a97442;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <a class="navbar-brand"><i class="bi bi-railway"></i> Rail Connect</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <!-- <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#"><i class="bi bi-house-door-fill"></i> Home</a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="TrainSearch&SeatAvailability.html"><i class="bi bi-search"></i> Train Search & Seat
+              Availability</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-background">
+    <div>
+      <h1>Welcome to Train Ticket System</h1>
+      <p class="lead" st>Book and manage your ticket with ease.</p>
+      <div class="mt-4">
+        <a href="login.html" class="btn btn-outline-light"><i class="bi bi-box-arrow-in-right"></i> Customer Login /
+          Registration</a>
+        <a href="admin/admin-login.html" class="btn btn-outline-light"><i class="bi bi-person-badge-fill"></i> Admin
+          Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+
+

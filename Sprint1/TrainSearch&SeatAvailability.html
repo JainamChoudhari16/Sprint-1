@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Train Search and Seat Availability</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f5f0e1;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+    .navbar-dark {
+      background-color: #8b5e3c !important;
+    }
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+      font-weight: 600;
+    }
+    .nav-link.active {
+      text-decoration: underline;
+    }
+    .container {
+      margin-top: 40px;
+      background-color: #fff9f0;
+      border: 1px solid #d2b48c;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 800px;
+    }
+    h3 {
+      color: #6e4f3a;
+      margin-bottom: 30px;
+      font-weight: 700;
+      text-align: center;
+    }
+    .btn-custom {
+      background-color: #8b5e3c;
+      color: white;
+    }
+    .btn-custom:hover {
+      background-color: #734c2e;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="index.html">
+      <i class="bi bi-train-front-fill"></i> Rail Connect
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+        <a class="nav-link" href="index.html">
+            <i class="bi bi-ticket-detailed-fill"></i> Home
+        </a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container" id="train-search">
+    <h3><i class="bi bi-search"></i> Search Trains</h3>
+    <form id="searchForm" class="row g-3 mb-4" onsubmit="event.preventDefault(); searchTrains();">
+      <div class="col-md-3">
+        <input type="text" id="searchOrigin" class="form-control" placeholder="Origin" list="locations" required />
+      </div>
+      <div class="col-md-3">
+        <input type="text" id="searchDestination" class="form-control" placeholder="Destination" list="locations" required />
+      </div>
+      <div class="col-md-3">
+        <input placeholder="Date" type="date" id="searchDate" class="form-control" required />
+      </div>
+      <datalist id="locations">
+        <option value="Solapur">
+        <option value="Ahmedabad">
+        <option value="Mumbai">
+        <option value="Gandhinagar">
+        <option value="Surat">
+          <option value="Chennai"></option>
+      </datalist>
+      <div class="col-md-3">
+        <button class="btn btn-secondary w-100" type="submit">
+          <i class="bi bi-search"></i> Search Trains
+        </button>
+      </div>
+    </form>
+
+    <div id="trainResults"></div>
+  </div>
+
+  <script>
+    // Dummy train data with seat classes
+    const dummyTrains = [
+      { train: "Express A", origin: "Solapur", destination: "Mumbai", classes: { Sleeper: 120, AC: 50, First: 30 } },
+      { train: "Superfast B", origin: "Ahmedabad", destination: "Surat", classes: { Sleeper: 80, AC: 40, First: 30 } },
+      { train: "Local C", origin: "Gandhinagar", destination: "Mumbai", classes: { Sleeper: 60, AC: 40, First: 30 } },
+      { train: "Express D", origin: "Mumbai", destination: "Ahmedabad", classes: { Sleeper: 70, AC: 20, First: 10 } },
+      { train: "Superfast E", origin: "Surat", destination: "Solapur", classes: { Sleeper: 40, AC: 30, First: 10 } },
+      { train: "Local F", origin: "Gandhinagar", destination: "Surat", classes: { Sleeper: 20, AC: 20, First: 10 } },
+      { train: "Express G", origin: "Ahmedabad", destination: "Solapur", classes: { Sleeper: 60, AC: 40, First: 20 } },
+      { train: "Superfast H", origin: "Mumbai", destination: "Gandhinagar", classes: { Sleeper: 30, AC: 40, First: 20 } },
+      { train: "Local I", origin: "Surat", destination: "Ahmedabad", classes: { Sleeper: 20, AC: 30, First: 10 } },
+      { train: "Express J", origin: "Solapur", destination: "Gandhinagar", classes: { Sleeper: 50, AC: 40, First: 20 } },
+      { train: "Superfast K", origin: "Mumbai", destination: "Surat", classes: { Sleeper: 60, AC: 60, First: 20 } },
+      { train: "Local L", origin: "Ahmedabad", destination: "Gandhinagar", classes: { Sleeper: 30, AC: 30, First: 10 } },
+      { train: "Express M", origin: "Gandhinagar", destination: "Solapur", classes: { Sleeper: 80, AC: 60, First: 20 } },
+      { train: "Superfast N", origin: "Surat", destination: "Mumbai", classes: { Sleeper: 90, AC: 70, First: 20 } },
+      { train: "Local O", origin: "Ahmedabad", destination: "Mumbai", classes: { Sleeper: 60, AC: 60, First: 10 } },
+      { train: "Express P", origin: "Solapur", destination: "Ahmedabad", classes: { Sleeper: 70, AC: 60, First: 10 } },
+      { train: "Superfast Q", origin: "Mumbai", destination: "Gandhinagar", classes: { Sleeper: 60, AC: 50, First: 10 } },
+      { train: "Local R", origin: "Surat", destination: "Gandhinagar", classes: { Sleeper: 30, AC: 40, First: 20 } },
+      { train: "Express S", origin: "Ahmedabad", destination: "Solapur", classes: { Sleeper: 60, AC: 40, First: 10 } },
+      { train: "Superfast T", origin: "Mumbai", destination: "Surat", classes: { Sleeper: 50, AC: 40, First: 10 } },
+      { train: "Superfast O", origin: "Chennai", destination: "Ahmedabad", classes: { Sleeper: 50, AC: 40, First: 10 }}
+    ];
+
+    // Save dummy data in localStorage
+    localStorage.setItem('trains', JSON.stringify(dummyTrains));
+
+    function toTitleCase(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
+
+    function searchTrains() {
+      let origin = document.getElementById('searchOrigin').value.trim();
+      let destination = document.getElementById('searchDestination').value.trim();
+      let travelDate = document.getElementById('searchDate').value.trim();
+      const allowedLocations = ["Solapur", "Ahmedabad", "Mumbai", "Gandhinagar", "Surat"];
+
+      origin = toTitleCase(origin);
+      destination = toTitleCase(destination);
+
+      if (!allowedLocations.includes(origin) || !allowedLocations.includes(destination)) {
+        alert("No Train for that route");
+        document.getElementById('trainResults').innerHTML = '';
+        return;
+      }
+
+      if (origin === destination) {
+        alert("Origin and Destination cannot be the same!");
+        document.getElementById('trainResults').innerHTML = '';
+        return;
+      }
+
+      if (!travelDate) {
+        alert("Please select a travel date.");
+        document.getElementById('trainResults').innerHTML = '';
+        return;
+      }
+
+      const trains = JSON.parse(localStorage.getItem('trains')) || [];
+      const results = trains.filter(
+        t => t.origin === origin && t.destination === destination
+      );
+
+      if (results.length === 0) {
+        alert("No Train for that route");
+        document.getElementById('trainResults').innerHTML = '';
+        return;
+      }
+
+      let html = '';
+      results.forEach((t, idx) => {
+        html += `
+          <div class="card mb-2">
+            <div class="card-body">
+              <h5 class="card-title">${t.train}</h5>
+              <p class="card-text">From: <b>${t.origin}</b> &rarr; To: <b>${t.destination}</b></p>
+              <p class="card-text">Travel Date: <b>${travelDate}</b></p>
+              <button class="btn btn-custom   p-2" type="button" onclick="toggleDetails('details${idx}')">View Seat Availability</button>
+              <div id="details${idx}" style="display:none; margin-top:10px;">
+                <table class="table table-bordered table-sm mb-2">
+                  <thead><tr><th>Class</th><th>Seats Available</th><th>Action</th></tr></thead>
+                  <tbody>
+                    ${Object.entries(t.classes).map(([cls, seats]) => `
+                      <tr>
+                        <td>${cls}</td>
+                        <td>${seats}</td>
+                        <td><button class="btn btn-custom btn-sm" onclick="bookNow('${t.train}','${cls}','${origin}','${destination}','${travelDate}')">Book Ticket</button></td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('trainResults').innerHTML = html;
+    }
+
+    // Toggle seat details
+    function toggleDetails(id) {
+      var el = document.getElementById(id);
+      if (el.style.display === 'none') {
+        el.style.display = 'block';
+      } else {
+        el.style.display = 'none';
+      }
+    }
+
+    // Book now: save selection and go to booking page
+    function bookNow(train, cls, origin, destination, date) {
+      localStorage.setItem('selectedBooking', JSON.stringify({train, cls, origin, destination, date}));
+      window.location.href = 'customer/book-ticket.html';
+    }
+
+    const today = new Date().toISOString().split("T")[0];
+    document.getElementById('searchDate').setAttribute('min', today);
+  </script>
+
+  <script>
+    function checkAuthForBooking() {
+      const user = sessionStorage.getItem('currentUser');
+      if (!user) {
+        alert('Please login first to book tickets');
+        window.location.href = 'login.html';
+        return false;
+      }
+      return true;
+    }
+
+    function bookNow(train, cls, origin, destination, date) {
+      if (!checkAuthForBooking()) {
+        return;
+      }
+      localStorage.setItem('selectedBooking', JSON.stringify({train, cls, origin, destination, date}));
+      window.location.href = 'Customer/book-ticket.html';
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

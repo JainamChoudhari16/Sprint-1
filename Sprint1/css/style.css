@@ -1,0 +1,84 @@
+html, body {
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+
+body {
+    background-color: #f8f9fa;
+}
+
+.admin-login-container{
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-login-container h3 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.btn-primary{
+    width: 100%;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 10px;
+}
+.admin-login-container .form-group {
+    margin-bottom: 15px;
+}
+
+/* .page-background {
+    background: url('../images/landing photo.jpg') no-repeat center 70%;
+    background-size: cover;
+    min-height: 100vh;
+    width: 100%;
+    color: white;
+    overflow-y: hidden;
+}    */
+
+:root {
+  --primary-bg: #f5f0e1; /* light beige/brown */
+  --secondary-bg: #e0d3c2;
+  --primary-color: #6e4f3a; /*brown for text */
+  --accent-color: #c0a283;
+  --btn-color: #8b5e3c;
+}
+
+body {
+  background-color: var(--primary-bg);
+  color: var(--primary-color);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.container, .card {
+  background-color: var(--secondary-bg);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h1, h2, h3 {
+  color: var(--primary-color);
+}
+
+.btn-custom {
+  background-color: var(--btn-color);
+  color: white;
+  border: none;
+}
+
+.btn-custom:hover {
+  background-color: #734c2e;
+}
+
